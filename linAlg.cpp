@@ -1,6 +1,7 @@
 #include "linAlg.h"
 
-#include <cmath>
+#define _USE_MATH_DEFINES
+#include <math.h>
 // #include <cassert>
 #include <string.h> // for memcpy & memset
 
@@ -407,16 +408,22 @@ void linAlg::applyTransformation(
     }
 }
 
+void linAlg::loadPerspectiveFovYMatrix( mat4_t& matrix, const float fovY_deg, const float aspectRatio, const float zNear, const float zFar ) {
+
+    const float xAspect = (aspectRatio > 1.0f) ? aspectRatio : 1.0f;
+    const float yAspect = (aspectRatio > 1.0f) ? 1.0f : 1.0f / aspectRatio;
+
+    const float yNoAspect = zNear * tanf( fovY_deg * 0.5f * M_PI / 180.0f );
+    const float yMax = yNoAspect * yAspect;
+    const float xMax = yNoAspect * xAspect;
+    loadPerspectiveMatrix( matrix, -xMax, xMax, -yMax, yMax, zNear, zFar );
+}
+
 void linAlg::loadPerspectiveMatrix( mat4_t& matrix, const float l, const float r, const float b, const float t, const float n, const float f ) {
-    float *const pM = getMatrixPtr( matrix );
-    memset( pM, 0, sizeof( float ) * 4 * 4 ); // clear to all zeros
-    pM[  0 ] = 2.0f * n / ( r - l );
-    pM[  2 ] = ( r + l ) / ( r - l );
-    pM[  5 ] = 2.0f * n / ( t - b );
-    pM[  6 ] = ( t + b ) / ( t - b );
-    pM[ 10 ] = -( f + n ) / ( f - n );
-    pM[ 11 ] = -2.0f * f * n / ( f - n );
-    pM[ 14 ] = -1.0f;
+    matrix[ 0 ] = vec4_t{ ( 2.0f * n ) / ( r - l ), 0.0f, ( r + l ) / ( r - l ), 0.0f };        // row 0
+    matrix[ 1 ] = vec4_t{ 0.0f, ( 2.0f * n ) / ( t - b ), ( t + b ) / ( t - b ), 0.0f };        // row 1
+    matrix[ 2 ] = vec4_t{ 0.0f, 0.0f, -( f + n ) / ( f - n ), ( -2.0f * f * n ) / ( f - n ) };  // row 2
+    matrix[ 3 ] = vec4_t{ 0.0f, 0.0f, -1.0f, 0.0f };                                            // row 3
 }
 
 void linAlg::cast( mat4_t& mat4, const mat3x4_t& mat3x4 ) {

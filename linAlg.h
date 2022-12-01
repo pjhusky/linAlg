@@ -182,6 +182,7 @@ struct linAlg {
         vec4_t *const pVertices, 
         const size_t numVertices );
 
+    static void loadPerspectiveFovYMatrix( mat4_t& matrix, const float fovY_deg, const float aspectRatio, const float zNear, const float zFar );
     static void loadPerspectiveMatrix( mat4_t& matrix, const float l, const float r, const float b, const float t, const float n, const float f );
 
     static void cast( mat4_t& mat4, const mat3x4_t& mat3x4 );
