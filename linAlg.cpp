@@ -220,11 +220,6 @@ void linAlg::loadIdentityMatrix( mat3_t& matrix ) {
 }
 
 void linAlg::loadIdentityMatrix( mat3x4_t& matrix ) {
-    //float *const pMatrix = getMatrixPtr( matrix );
-    //std::fill( pMatrix, pMatrix + 12, 0.0f );
-    //pMatrix[  0 ] = 1.0f;
-    //pMatrix[  5 ] = 1.0f;
-    //pMatrix[ 10 ] = 1.0f;
     matrix[0] = linAlg::vec4_t{ 1.0f, 0.0f, 0.0f, 0.0f };
     matrix[1] = linAlg::vec4_t{ 0.0f, 1.0f, 0.0f, 0.0f };
     matrix[2] = linAlg::vec4_t{ 0.0f, 0.0f, 1.0f, 0.0f };
@@ -245,10 +240,9 @@ void linAlg::loadTranslationMatrix( mat3_t& matrix, const vec2_t& translationVec
 
 void linAlg::loadTranslationMatrix( mat3x4_t& matrix, const vec3_t& translationVec ) {
     loadIdentityMatrix( matrix );
-    float *const pMatrix = getMatrixPtr( matrix );
-    pMatrix[  3 ] = translationVec[ 0 ];
-    pMatrix[  7 ] = translationVec[ 1 ];
-    pMatrix[ 11 ] = translationVec[ 2 ];
+    matrix[0][3] = translationVec[0];
+    matrix[1][3] = translationVec[1];
+    matrix[2][3] = translationVec[2];
 }
 
 void linAlg::loadRotationXMatrix( mat3x4_t& matrix, const float radiantsX ) {
@@ -415,7 +409,7 @@ void linAlg::loadPerspectiveFovYMatrix( mat4_t& matrix, const float fovY_deg, co
     const float xAspect = (aspectRatio > 1.0f) ? aspectRatio : 1.0f;
     const float yAspect = (aspectRatio > 1.0f) ? 1.0f : 1.0f / aspectRatio;
 
-    const float yNoAspect = zNear * tanf( fovY_deg * 0.5f * M_PI / 180.0f );
+    const float yNoAspect = zNear * tanf( fovY_deg * 0.5f * static_cast<float>(M_PI) / 180.0f );
     const float yMax = yNoAspect * yAspect;
     const float xMax = yNoAspect * xAspect;
     loadPerspectiveMatrix( matrix, -xMax, xMax, -yMax, yMax, zNear, zFar );
