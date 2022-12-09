@@ -429,6 +429,18 @@ void linAlg::cast( mat4_t& mat4, const mat3x4_t& mat3x4 ) {
     mat4[ 3 ] = vec4_t{ 0.0f, 0.0f, 0.0f, 1.0f };
 }
 
+void linAlg::cast( mat3_t& mat3, const mat3x4_t& mat3x4 ) {
+    mat3[0] = vec3_t{ mat3x4[0][0], mat3x4[0][1], mat3x4[0][2] };
+    mat3[1] = vec3_t{ mat3x4[1][0], mat3x4[1][1], mat3x4[1][2] };
+    mat3[2] = vec3_t{ mat3x4[2][0], mat3x4[2][1], mat3x4[2][2] };
+}
+
+void linAlg::cast( mat3x4_t& mat3x4, const mat3_t& mat3 ) {
+    mat3x4[0] = vec4_t{ mat3[0][0], mat3[0][1], mat3[0][2], 0.0f };
+    mat3x4[1] = vec4_t{ mat3[1][0], mat3[1][1], mat3[1][2], 0.0f };
+    mat3x4[2] = vec4_t{ mat3[2][0], mat3[2][1], mat3[2][2], 0.0f };
+}
+
 void linAlg::quaternionFromAxisAngle( quat_t& quat, const vec3_t& axis, float angle ) {
     const float sina2 = (float)sinf( 0.5f * angle );
     const float norm = (float)sqrtf( axis[0] * axis[0] + axis[1] * axis[1] + axis[2] * axis[2] );

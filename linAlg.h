@@ -22,17 +22,16 @@ struct linAlg {
 
     using quat_t = vec4_t;
 
-    static constexpr size_t numRows_mat2x2 = 2;
-    using mat2_t = std::array< vec2_t, numRows_mat2x2 >; // row-major storage, 2 rows, 2 columns
+    template<typename val_T, std::size_t rows, std::size_t cols>
+    using mat_t = std::array< std::array< val_T, cols >, rows >;
 
-    static constexpr size_t numRows_mat3x3 = 3;
-    using mat3_t = std::array< vec3_t, numRows_mat3x3 >; // row-major storage, 3 rows, 3 columns
-
-    static constexpr size_t numRows_mat3x4 = 3;
-    using mat3x4_t = std::array< vec4_t, numRows_mat3x4 >; // row-major storage, 3 rows, 4 columns
+    using mat2_t = mat_t< float, 2, 2 >;
+    using mat3_t = mat_t< float, 3, 3 >;
+    using mat3x4_t = mat_t< float, 3, 4 >;
     
     static constexpr size_t numRows_mat4x4 = 4;
-    using mat4_t = std::array< vec4_t, numRows_mat4x4 >; // row-major storage, 4 rows, 4 columns
+    //using mat4_t = std::array< vec4_t, numRows_mat4x4 >; // row-major storage, 4 rows, 4 columns
+    using mat4_t = mat_t< float, 4, 4 >;
 
     static void cast( vec2_t& dst, const vec3_t& src );
     static void cast( vec2_t& dst, const vec4_t& src );
@@ -186,11 +185,40 @@ struct linAlg {
     static void loadPerspectiveMatrix( mat4_t& matrix, const float l, const float r, const float b, const float t, const float n, const float f );
 
     static void cast( mat4_t& mat4, const mat3x4_t& mat3x4 );
+    static void cast( mat3_t& mat3, const mat3x4_t& mat3x4 );
+    static void cast( mat3x4_t& mat3x4, const mat3_t& mat3 );
 
     // https://sourceforge.net/p/anttweakbar/code/ci/master/tree/examples/TwSimpleGLUT.c#l59
     static void quaternionFromAxisAngle( quat_t& quat, const vec3_t& axis, float angle );
     static void quaternionToMatrix( mat3x4_t& mat, const quat_t& quat );
     static void multQuaternion( quat_t& result, const quat_t& q1, const quat_t& q2 );
 };
+
+// for matrix: inner array stores the rows vectors, outer array says how many row vectors we have
+// vector = matrix * vector
+template<typename val_T, size_t numColumns_T, size_t numRows_T>
+static std::array<val_T, numRows_T> operator*( const std::array< std::array<val_T, numColumns_T>, numRows_T >& matrix, const std::array<val_T, numColumns_T>& vector ) {
+    std::array<val_T, numRows_T> result;
+    result[0] = linAlg::dot( matrix[0], vector );
+    result[1] = linAlg::dot( matrix[1], vector );
+    result[2] = linAlg::dot( matrix[2], vector );
+    return result;
+}
+
+template<typename val_T, std::size_t rowsL_T, std::size_t colsL_rowsR_T, std::size_t colsR_T>
+static linAlg::mat_t<val_T, rowsL_T, colsR_T > operator* ( const linAlg::mat_t< val_T, rowsL_T, colsL_rowsR_T >& matrixLhs,
+    const linAlg::mat_t< val_T, colsL_rowsR_T, colsR_T >& matrixRhs ) {
+    linAlg::mat_t < val_T, rowsL_T, colsR_T > result;
+    for (std::size_t col = 0; col < colsR_T; col++) { // left columns
+        for (std::size_t row = 0; row < rowsL_T; row++) { // right rows
+            float accum = 0.0f;
+            for (std::size_t k = 0; k < colsL_rowsR_T; k++) { // dot of left row (over columns) and right columns ( over rows )
+                accum += matrixLhs.data[row][k] * matrixRhs.data[k][col];
+            }
+            result.data[row][col] = accum;
+        }
+    }
+    return result;
+}
 
 #endif // _LINALG_H_671dfc89_7e49_4a11_812b_1b04a6e746cc
