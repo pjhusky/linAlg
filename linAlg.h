@@ -214,6 +214,9 @@ static std::array<val_T, numRows_T> operator*( const std::array< std::array<val_
     return result;
 }
 
+// matrix = matrix * matrix
+// inner array stores the rows vectors, outer array says how many row vectors we have
+// "inner" index - the one closer to the var name - accesses the row, the outer "last" indexing parentheses index the column within that row
 template<typename val_T, std::size_t rowsL_T, std::size_t colsL_rowsR_T, std::size_t colsR_T>
 static linAlg::mat_t<val_T, rowsL_T, colsR_T > operator* ( const linAlg::mat_t< val_T, rowsL_T, colsL_rowsR_T >& matrixLhs,
     const linAlg::mat_t< val_T, colsL_rowsR_T, colsR_T >& matrixRhs ) {
