@@ -7,20 +7,29 @@
 
 struct linAlg {
 
-    using i32vec2_t = std::array< int32_t, 2 >;
-    using i32vec3_t = std::array< int32_t, 3 >;
+    template<typename val_T, std::size_t numElements>
+    using vec_t = std::array< val_T, numElements >;
 
-    using u16vec2_t = std::array< uint16_t, 2 >;
-    using u16vec3_t = std::array< uint16_t, 3 >;
+    template<std::size_t numElements>
+    using floatVec_t = vec_t< float, numElements >;
 
-    using u32vec2_t = std::array< uint32_t, 2 >;
-    using u32vec3_t = std::array< uint32_t, 3 >;
-
-    using vec2_t = std::array< float, 2 >;
-    using vec3_t = std::array< float, 3 >;
-    using vec4_t = std::array< float, 4 >;
+    using vec2_t = floatVec_t< 2 >;
+    using vec3_t = floatVec_t< 3 >;
+    using vec4_t = floatVec_t< 4 >;
 
     using quat_t = vec4_t;
+
+
+    using i32vec2_t = vec_t< int32_t, 2 >;
+    using i32vec3_t = vec_t< int32_t, 3 >;
+
+    using u16vec2_t = vec_t< uint16_t, 2 >;
+    using u16vec3_t = vec_t< uint16_t, 3 >;
+
+    using u32vec2_t = vec_t< uint32_t, 2 >;
+    using u32vec3_t = vec_t< uint32_t, 3 >;
+
+
 
     template<typename val_T, std::size_t rows, std::size_t cols>
     using mat_t = std::array< std::array< val_T, cols >, rows >;
