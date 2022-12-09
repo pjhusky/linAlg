@@ -30,17 +30,13 @@ struct linAlg {
     using u32vec3_t = vec_t< uint32_t, 3 >;
 
 
-
     template<typename val_T, std::size_t rows, std::size_t cols>
     using mat_t = std::array< std::array< val_T, cols >, rows >;
 
-    using mat2_t = mat_t< float, 2, 2 >;
-    using mat3_t = mat_t< float, 3, 3 >;
+    using mat2_t   = mat_t< float, 2, 2 >;
+    using mat3_t   = mat_t< float, 3, 3 >;
     using mat3x4_t = mat_t< float, 3, 4 >;
-    
-    static constexpr size_t numRows_mat4x4 = 4;
-    //using mat4_t = std::array< vec4_t, numRows_mat4x4 >; // row-major storage, 4 rows, 4 columns
-    using mat4_t = mat_t< float, 4, 4 >;
+    using mat4_t   = mat_t< float, 4, 4 >;
 
     static void cast( vec2_t& dst, const vec3_t& src );
     static void cast( vec2_t& dst, const vec4_t& src );
