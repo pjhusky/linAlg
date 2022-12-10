@@ -31,7 +31,9 @@ struct linAlg {
 
 
     template<typename val_T, std::size_t rows, std::size_t cols>
-    using mat_t = std::array< std::array< val_T, cols >, rows >;
+    //using mat_t = std::array< std::array< val_T, cols >, rows >;
+    //using mat_t = std::array< vec_t< val_T, cols >, rows >;
+    using mat_t = vec_t< vec_t< val_T, cols >, rows >;
 
     using mat2_t   = mat_t< float, 2, 2 >;
     using mat3_t   = mat_t< float, 3, 3 >;
@@ -223,7 +225,7 @@ static linAlg::mat_t<val_T, rowsL_T, colsR_T > operator* ( const linAlg::mat_t< 
     linAlg::mat_t< val_T, rowsL_T, colsR_T > result;
     for (std::size_t col = 0; col < colsR_T; col++) { // left columns
         for (std::size_t row = 0; row < rowsL_T; row++) { // right rows
-            float accum = 0.0f;
+            val_T accum{ 0 };
             for (std::size_t k = 0; k < colsL_rowsR_T; k++) { // dot of left row (over columns) and right columns ( over rows )
                 accum += matrixLhs[row][k] * matrixRhs[k][col];
             }
@@ -238,44 +240,47 @@ template<typename val_T, std::size_t rowsL_T>
 static linAlg::mat_t<val_T, rowsL_T, rowsL_T+1 > operator* ( const linAlg::mat_t< val_T, rowsL_T, rowsL_T+1 >& matrixLhs,
                                                              const linAlg::mat_t< val_T, rowsL_T, rowsL_T+1 >& matrixRhs ) {
     constexpr std::size_t colsR_T = rowsL_T+1;
+    constexpr std::size_t squareDim = rowsL_T;
     linAlg::mat_t< val_T, rowsL_T, colsR_T > result;
-    for (std::size_t col = 0; col < rowsL_T; col++) { // left columns
-        for (std::size_t row = 0; row < rowsL_T; row++) { // right rows
-            float accum = 0.0f;
-            for (std::size_t k = 0; k < colsR_T; k++) { // dot of left row (over columns) and right columns ( over rows )
+    for (std::size_t col = 0; col < squareDim; col++) { // left columns => only rowsL_T number of columns to iterate over
+        for (std::size_t row = 0; row < squareDim; row++) { // right rows
+            val_T accum{ 0 };
+            for (std::size_t k = 0; k < squareDim; k++) { // dot of left row (over columns) and right columns ( over rows )
                 accum += matrixLhs[row][k] * matrixRhs[k][col];
             }
             result[row][col] = accum;
         }
     }
     // fix-up for last column (translations)
-    // result[0][3] = matrixLhs[0][3];
-    // result[1][3] = matrixLhs[1][3];
-    // result[2][3] = matrixLhs[2][3];
     constexpr std::size_t lastColumnIdx = colsR_T - 1;
+    
     for ( std::size_t row = 0; row < rowsL_T; row++ ) {
-        result[row][lastColumnIdx] = matrixLhs[row][lastColumnIdx];
+        val_T accum{ 0 };
+        for (std::size_t k = 0; k < squareDim; k++) {
+            accum += matrixLhs[row][k] * matrixRhs[k][lastColumnIdx];
+        }
+        result[row][lastColumnIdx] = accum + matrixLhs[row][lastColumnIdx];
     }
+    
+
     return result;
 }
 
-template<typename val_T, std::size_t numCoordsL_T, std::size_t numCoordsR_T>
-static bool operator==( const linAlg::vec_t<val_T, numCoordsL_T>& vectorLhs,
-                        const linAlg::vec_t<val_T, numCoordsR_T>& vectorRhs ) {
-    if ( numCoordsL_T != numCoordsR_T ) { return false; }
-    for ( std::size_t coord = 0; coord < numCoordsL_T; coord++ ) {
+template<typename val_T, std::size_t numCoords_T>
+static bool operator==( const linAlg::vec_t<val_T, numCoords_T>& vectorLhs,
+                        const linAlg::vec_t<val_T, numCoords_T>& vectorRhs ) {
+    for ( std::size_t coord = 0; coord < numCoords_T; coord++ ) {
         if ( vectorLhs[coord] != vectorRhs[coord] ) { return false; }
     }
     return true;
 }
 
-template<typename val_T, std::size_t rowsL_T, std::size_t colsL_T, std::size_t rowsR_T, std::size_t colsR_T>
-static bool operator== ( const linAlg::mat_t< val_T, rowsL_T, colsL_T >& matrixLhs,
-                         const linAlg::mat_t< val_T, rowsR_T, colsR_T >& matrixRhs ) {
-    if ( rowsL_T != rowsR_T || colsL_T != colsR_T ) { return false; }
+template<typename val_T, std::size_t rows_T, std::size_t cols_T>
+static bool operator== ( const linAlg::mat_t< val_T, rows_T, cols_T >& matrixLhs,
+                         const linAlg::mat_t< val_T, rows_T, cols_T >& matrixRhs ) {
     
-    for (std::size_t col = 0; col < rowsL_T; col++) {
-        for (std::size_t row = 0; row < rowsL_T; row++) {
+    for (std::size_t col = 0; col < cols_T; col++) {
+        for (std::size_t row = 0; row < rows_T; row++) {
             if ( matrixLhs[row][col] != matrixRhs[row][col] ) { return false; }
         }
     }
