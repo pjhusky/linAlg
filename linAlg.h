@@ -40,9 +40,13 @@ struct linAlg {
     using mat3x4_t = mat_t< float, 3, 4 >;
     using mat4_t   = mat_t< float, 4, 4 >;
 
-    static void cast( vec2_t& dst, const vec3_t& src );
-    static void cast( vec2_t& dst, const vec4_t& src );
-    static void cast( vec3_t& dst, const vec4_t& src );
+    template< typename val_T, std::size_t numElementsDst, std::size_t numElementsSrc >
+    static void castVector( vec_t<val_T, numElementsDst>& dst, const vec_t<val_T, numElementsSrc>& src ) {
+        memcpy( dst.data(), src.data(), minimum( src.size(), dst.size() ) * sizeof( val_T ) );
+        if (dst.size() > src.size()) {
+            std::fill( &dst[src.size()], dst.data() + dst.size()*sizeof(val_T), val_T{ 0 } );
+        }
+    }
 
     static void stripRowAndColumn( mat2_t& dst, const mat3_t&src, const int32_t row, const int32_t column );
     static void stripRowAndColumn( mat3_t& dst, const mat4_t&src, const int32_t row, const int32_t column );
@@ -175,15 +179,19 @@ struct linAlg {
     static void multMatrix( mat3x4_t& result, const mat3x4_t& left, const mat3x4_t& right );
     static void multMatrix( mat4_t& result, const mat4_t& left, const mat4_t& right );
 
-    static void applyTransformation(
+    static void applyTransformationToPoint(
         const mat3_t& transformationMatrix,
         vec3_t* const pVertices,
         const size_t numVertices );
-    static void applyTransformation(
+    static void applyTransformationToPoint(
         const mat3x4_t& transformationMatrix, 
         vec3_t *const pVertices, 
         const size_t numVertices );
-    static void applyTransformation( 
+    static void applyTransformationToVector(
+        const mat3x4_t& transformationMatrix,
+        vec3_t* const pVector,
+        const size_t numVertices );
+    static void applyTransformationToPoint( 
         const mat4_t& transformationMatrix, 
         vec4_t *const pVertices, 
         const size_t numVertices );
@@ -191,9 +199,24 @@ struct linAlg {
     static void loadPerspectiveFovYMatrix( mat4_t& matrix, const float fovY_deg, const float aspectRatio, const float zNear, const float zFar );
     static void loadPerspectiveMatrix( mat4_t& matrix, const float l, const float r, const float b, const float t, const float n, const float f );
 
-    static void cast( mat4_t& mat4, const mat3x4_t& mat3x4 );
-    static void cast( mat3_t& mat3, const mat3x4_t& mat3x4 );
-    static void cast( mat3x4_t& mat3x4, const mat3_t& mat3 );
+    static void castMatrix( mat4_t& mat4, const mat3x4_t& mat3x4 );
+    static void castMatrix( mat3_t& mat3, const mat3x4_t& mat3x4 );
+    static void castMatrix( mat3x4_t& mat3x4, const mat3_t& mat3 );
+
+    template<typename val_T, std::size_t rows_T, std::size_t cols_T>
+    static bool approxEqual( const linAlg::mat_t< val_T, rows_T, cols_T >& matrixLhs,
+                             const linAlg::mat_t< val_T, rows_T, cols_T >& matrixRhs,
+                             const val_T epsilon = val_T{ 0.001 } ) {
+
+        for (std::size_t col = 0; col < cols_T; col++) {
+            for (std::size_t row = 0; row < rows_T; row++) {
+                if ( abs( matrixLhs[row][col] - matrixRhs[row][col] ) > epsilon ) { return false; }
+            }
+        }
+
+        return true;
+    }
+
 
     // https://sourceforge.net/p/anttweakbar/code/ci/master/tree/examples/TwSimpleGLUT.c#l59
     static void quaternionFromAxisAngle( quat_t& quat, const vec3_t& axis, float angle );

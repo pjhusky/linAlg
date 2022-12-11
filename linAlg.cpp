@@ -4,18 +4,7 @@
     #define _USE_MATH_DEFINES
 #endif
 #include <math.h>
-// #include <cassert>
 #include <string.h> // for memcpy & memset
-
-void linAlg::cast( vec2_t& dst, const vec3_t& src ) {
-    memcpy( dst.data(), src.data(), dst.size() * sizeof( float ) );
-}
-void linAlg::cast( vec2_t& dst, const vec4_t& src ) {
-    memcpy( dst.data(), src.data(), dst.size() * sizeof( float ) );
-}
-void linAlg::cast( vec3_t& dst, const vec4_t& src ) {
-    memcpy( dst.data(), src.data(), dst.size() * sizeof( float ) );
-}
 
 void linAlg::stripRowAndColumn( mat2_t& dst, const mat3_t&src, const int32_t row, const int32_t column ) {
     int32_t dstRowIdx = 0;
@@ -358,7 +347,7 @@ void linAlg::multMatrix( mat3x4_t& result, const mat3x4_t& left, const mat3x4_t&
     pM[ 11 ] = pL[ 8 ] * pR[ 3 ] + pL[ 9 ] * pR[ 7 ] + pL[ 10 ] * pR[ 11 ] + pL[ 11 ];
 }
 
-void linAlg::applyTransformation(
+void linAlg::applyTransformationToPoint(
     const mat3_t& transformationMatrix,
     vec3_t* const pVertices,
     const size_t numVertices ) {
@@ -373,22 +362,37 @@ void linAlg::applyTransformation(
     }
 }
 
-void linAlg::applyTransformation( 
+void linAlg::applyTransformationToPoint( 
     const mat3x4_t& transformationMatrix, 
-    vec3_t *const pVertices, 
+    vec3_t *const pPosition, 
     const size_t numVertices ) {
 
     const float *const pM = getMatrixPtr( transformationMatrix );
 
     for( size_t i = 0; i < numVertices; i++ ) {
-        const auto transformVertex = pVertices[ i ]; // making a copy is important!
-        pVertices[ i ][ 0 ] = pM[ 0 ] * transformVertex[ 0 ] + pM[ 1 ] * transformVertex[ 1 ] + pM[  2 ] * transformVertex[ 2 ] + pM[  3 ];
-        pVertices[ i ][ 1 ] = pM[ 4 ] * transformVertex[ 0 ] + pM[ 5 ] * transformVertex[ 1 ] + pM[  6 ] * transformVertex[ 2 ] + pM[  7 ];
-        pVertices[ i ][ 2 ] = pM[ 8 ] * transformVertex[ 0 ] + pM[ 9 ] * transformVertex[ 1 ] + pM[ 10 ] * transformVertex[ 2 ] + pM[ 11 ];
+        const auto transformVertex = pPosition[ i ]; // making a copy is important!
+        pPosition[ i ][ 0 ] = pM[ 0 ] * transformVertex[ 0 ] + pM[ 1 ] * transformVertex[ 1 ] + pM[  2 ] * transformVertex[ 2 ] + pM[  3 ];
+        pPosition[ i ][ 1 ] = pM[ 4 ] * transformVertex[ 0 ] + pM[ 5 ] * transformVertex[ 1 ] + pM[  6 ] * transformVertex[ 2 ] + pM[  7 ];
+        pPosition[ i ][ 2 ] = pM[ 8 ] * transformVertex[ 0 ] + pM[ 9 ] * transformVertex[ 1 ] + pM[ 10 ] * transformVertex[ 2 ] + pM[ 11 ];
     }
 }
 
-void linAlg::applyTransformation( 
+void linAlg::applyTransformationToVector( 
+    const mat3x4_t& transformationMatrix, 
+    vec3_t *const pVector, 
+    const size_t numVertices ) {
+
+    const float *const pM = getMatrixPtr( transformationMatrix );
+
+    for( size_t i = 0; i < numVertices; i++ ) {
+        const auto transformVector = pVector[ i ]; // making a copy is important!
+        pVector[ i ][ 0 ] = pM[ 0 ] * transformVector[ 0 ] + pM[ 1 ] * transformVector[ 1 ] + pM[  2 ] * transformVector[ 2 ] + pM[  3 ];
+        pVector[ i ][ 1 ] = pM[ 4 ] * transformVector[ 0 ] + pM[ 5 ] * transformVector[ 1 ] + pM[  6 ] * transformVector[ 2 ] + pM[  7 ];
+        pVector[ i ][ 2 ] = pM[ 8 ] * transformVector[ 0 ] + pM[ 9 ] * transformVector[ 1 ] + pM[ 10 ] * transformVector[ 2 ] + pM[ 11 ];
+    }
+}
+
+void linAlg::applyTransformationToPoint( 
     const mat4_t& transformationMatrix, 
     vec4_t *const pVertices, 
     const size_t numVertices ) {
@@ -422,20 +426,20 @@ void linAlg::loadPerspectiveMatrix( mat4_t& matrix, const float l, const float r
     matrix[ 3 ] = vec4_t{ 0.0f, 0.0f, -1.0f, 0.0f };                                            // row 3
 }
 
-void linAlg::cast( mat4_t& mat4, const mat3x4_t& mat3x4 ) {
+void linAlg::castMatrix( mat4_t& mat4, const mat3x4_t& mat3x4 ) {
     mat4[ 0 ] = mat3x4[ 0 ];
     mat4[ 1 ] = mat3x4[ 1 ];
     mat4[ 2 ] = mat3x4[ 2 ];
     mat4[ 3 ] = vec4_t{ 0.0f, 0.0f, 0.0f, 1.0f };
 }
 
-void linAlg::cast( mat3_t& mat3, const mat3x4_t& mat3x4 ) {
+void linAlg::castMatrix( mat3_t& mat3, const mat3x4_t& mat3x4 ) {
     mat3[0] = vec3_t{ mat3x4[0][0], mat3x4[0][1], mat3x4[0][2] };
     mat3[1] = vec3_t{ mat3x4[1][0], mat3x4[1][1], mat3x4[1][2] };
     mat3[2] = vec3_t{ mat3x4[2][0], mat3x4[2][1], mat3x4[2][2] };
 }
 
-void linAlg::cast( mat3x4_t& mat3x4, const mat3_t& mat3 ) {
+void linAlg::castMatrix( mat3x4_t& mat3x4, const mat3_t& mat3 ) {
     mat3x4[0] = vec4_t{ mat3[0][0], mat3[0][1], mat3[0][2], 0.0f };
     mat3x4[1] = vec4_t{ mat3[1][0], mat3[1][1], mat3[1][2], 0.0f };
     mat3x4[2] = vec4_t{ mat3[2][0], mat3[2][1], mat3[2][2], 0.0f };
