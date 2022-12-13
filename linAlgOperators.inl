@@ -1,10 +1,133 @@
+// #####################
+// ### vec op scalar ###
+// #####################
+template<typename val_T, std::size_t numCoords_T>
+static inline linAlg::vec_t< val_T, numCoords_T > operator+( const linAlg::vec_t< val_T, numCoords_T >& vecLhs, const val_T& scalRhs ) {
+    linAlg::vec_t< val_T, numCoords_T > result;
+    for (std::size_t i = 0; i < numCoords_T; i++) {
+        result[i] = vecLhs[i] + scalRhs;
+    }
+    return result;
+}
+
+template<typename val_T, std::size_t numCoords_T>
+static inline linAlg::vec_t< val_T, numCoords_T > operator-( const linAlg::vec_t< val_T, numCoords_T >& vecLhs, const val_T& scalRhs ) {
+    linAlg::vec_t< val_T, numCoords_T > result;
+    for (std::size_t i = 0; i < numCoords_T; i++) {
+        result[i] = vecLhs[i] - scalRhs;
+    }
+    return result;
+}
+
+template<typename val_T, std::size_t numCoords_T>
+static inline linAlg::vec_t< val_T, numCoords_T > operator*( const linAlg::vec_t< val_T, numCoords_T >& vecLhs, const val_T& scalRhs ) {
+    linAlg::vec_t< val_T, numCoords_T > result;
+    for (std::size_t i = 0; i < numCoords_T; i++) {
+        result[i] = vecLhs[i] * scalRhs;
+    }
+    return result;
+}
+
+template<typename val_T, std::size_t numCoords_T>
+static inline linAlg::vec_t< val_T, numCoords_T > operator/( const linAlg::vec_t< val_T, numCoords_T >& vecLhs, const val_T& scalRhs ) {
+    linAlg::vec_t< val_T, numCoords_T > result;
+    for (std::size_t i = 0; i < numCoords_T; i++) {
+        result[i] = vecLhs[i] / scalRhs;
+    }
+    return result;
+}
+
+// #####################
+// ### scalar op vec ###
+// #####################
+template<typename val_T, std::size_t numCoords_T>
+static inline linAlg::vec_t< val_T, numCoords_T > operator+( const val_T& scalLhs, const linAlg::vec_t< val_T, numCoords_T >& vecRhs ) {
+    linAlg::vec_t< val_T, numCoords_T > result;
+    for (std::size_t i = 0; i < numCoords_T; i++) {
+        result[i] = scalLhs + vecRhs[i];
+    }
+    return result;
+}
+
+template<typename val_T, std::size_t numCoords_T>
+static inline linAlg::vec_t< val_T, numCoords_T > operator-( const val_T& scalLhs, const linAlg::vec_t< val_T, numCoords_T >& vecRhs ) {
+    linAlg::vec_t< val_T, numCoords_T > result;
+    for (std::size_t i = 0; i < numCoords_T; i++) {
+        result[i] = scalLhs - vecRhs[i];
+    }
+    return result;
+}
+
+template<typename val_T, std::size_t numCoords_T>
+static inline linAlg::vec_t< val_T, numCoords_T > operator*( const val_T& scalLhs, const linAlg::vec_t< val_T, numCoords_T >& vecRhs ) {
+    linAlg::vec_t< val_T, numCoords_T > result;
+    for (std::size_t i = 0; i < numCoords_T; i++) {
+        result[i] = scalLhs * vecRhs[i];
+    }
+    return result;
+}
+
+template<typename val_T, std::size_t numCoords_T>
+static inline linAlg::vec_t< val_T, numCoords_T > operator/( const val_T& scalLhs, const linAlg::vec_t< val_T, numCoords_T >& vecRhs ) {
+    linAlg::vec_t< val_T, numCoords_T > result;
+    for (std::size_t i = 0; i < numCoords_T; i++) {
+        result[i] = scalLhs / vecRhs[i];
+    }
+    return result;
+}
+
+
+// ##################
+// ### vec op vec ###
+// ##################
+template<typename val_T, std::size_t numCoords_T>
+static inline linAlg::vec_t< val_T, numCoords_T > operator+( const linAlg::vec_t< val_T, numCoords_T >& lhs, const linAlg::vec_t< val_T, numCoords_T >& rhs ) {
+    linAlg::vec_t< val_T, numCoords_T > result;
+    for (std::size_t i = 0; i < numCoords_T; i++) {
+        result[i] = lhs[i] + rhs[i];
+    }
+    return result;
+}
+
+template<typename val_T, std::size_t numCoords_T>
+static inline linAlg::vec_t< val_T, numCoords_T > operator-( const linAlg::vec_t< val_T, numCoords_T >& lhs, const linAlg::vec_t< val_T, numCoords_T >& rhs ) {
+    linAlg::vec_t< val_T, numCoords_T > result;
+    for (std::size_t i = 0; i < numCoords_T; i++) {
+        result[i] = lhs[i] - rhs[i];
+    }
+    return result;
+}
+
+template<typename val_T, std::size_t numCoords_T>
+static inline linAlg::vec_t< val_T, numCoords_T > operator*( const linAlg::vec_t< val_T, numCoords_T >& lhs, const linAlg::vec_t< val_T, numCoords_T >& rhs ) {
+    linAlg::vec_t< val_T, numCoords_T > result;
+    for (std::size_t i = 0; i < numCoords_T; i++) {
+        result[i] = lhs[i] * rhs[i];
+    }
+    return result;
+}
+
+template<typename val_T, std::size_t numCoords_T>
+static inline linAlg::vec_t< val_T, numCoords_T > operator/( const linAlg::vec_t< val_T, numCoords_T >& lhs, const linAlg::vec_t< val_T, numCoords_T >& rhs ) {
+    linAlg::vec_t< val_T, numCoords_T > result;
+    for (std::size_t i = 0; i < numCoords_T; i++) {
+        result[i] = lhs[i] / rhs[i];
+    }
+    return result;
+}
+
+
+
+// ##################
+// ### mat op vec ###
+// ##################
 
 
 // for matrix: inner array stores the rows vectors, outer array says how many row vectors we have
 // vector = matrix * vector
 template<typename val_T, std::size_t numColumns_T, std::size_t numRows_T>
 static linAlg::vec_t<val_T, numRows_T> operator*( const linAlg::mat_t<val_T, numRows_T, numColumns_T >& matrix,
-    const linAlg::vec_t<val_T, numColumns_T>& vector ) {
+                                                  const linAlg::vec_t<val_T, numColumns_T>& vector ) {
     linAlg::vec_t<val_T, numRows_T> result;
     // result[0] = linAlg::dot( matrix[0], vector );
     // result[1] = linAlg::dot( matrix[1], vector );
@@ -15,12 +138,16 @@ static linAlg::vec_t<val_T, numRows_T> operator*( const linAlg::mat_t<val_T, num
     return result;
 }
 
+// ##################
+// ### mat op mat ###
+// ##################
+
 // matrix = matrix * matrix
 // inner array stores the rows vectors, outer array says how many row vectors we have
 // "inner" index - the one closer to the var name - accesses the row, the outer "last" indexing parentheses index the column within that row
 template<typename val_T, std::size_t rowsL_T, std::size_t colsL_rowsR_T, std::size_t colsR_T>
 static linAlg::mat_t<val_T, rowsL_T, colsR_T > operator* ( const linAlg::mat_t< val_T, rowsL_T, colsL_rowsR_T >& matrixLhs,
-    const linAlg::mat_t< val_T, colsL_rowsR_T, colsR_T >& matrixRhs ) {
+                                                           const linAlg::mat_t< val_T, colsL_rowsR_T, colsR_T >& matrixRhs ) {
     linAlg::mat_t< val_T, rowsL_T, colsR_T > result;
     for (std::size_t col = 0; col < colsR_T; col++) { // left columns
         for (std::size_t row = 0; row < rowsL_T; row++) { // right rows
@@ -37,7 +164,7 @@ static linAlg::mat_t<val_T, rowsL_T, colsR_T > operator* ( const linAlg::mat_t< 
 // e.g., in 3D, non-perspective transformations can be represented by 3x4 matrices => treat them as 3x3 rotations and fix up translational part
 template<typename val_T, std::size_t rowsL_T>
 static linAlg::mat_t<val_T, rowsL_T, rowsL_T + 1 > operator* ( const linAlg::mat_t< val_T, rowsL_T, rowsL_T + 1 >& matrixLhs,
-    const linAlg::mat_t< val_T, rowsL_T, rowsL_T + 1 >& matrixRhs ) {
+                                                               const linAlg::mat_t< val_T, rowsL_T, rowsL_T + 1 >& matrixRhs ) {
     constexpr std::size_t colsR_T = rowsL_T + 1;
     constexpr std::size_t squareDim = rowsL_T;
     linAlg::mat_t< val_T, rowsL_T, colsR_T > result;
@@ -61,9 +188,13 @@ static linAlg::mat_t<val_T, rowsL_T, rowsL_T + 1 > operator* ( const linAlg::mat
         result[row][lastColumnIdx] = accum + matrixLhs[row][lastColumnIdx];
     }
 
-
     return result;
 }
+
+
+// #######################
+// ### equality checks ###
+// #######################
 
 template<typename val_T, std::size_t numCoords_T>
 static bool operator==( const linAlg::vec_t<val_T, numCoords_T>& vectorLhs,
