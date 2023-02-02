@@ -117,7 +117,6 @@ static inline linAlg::vec_t< val_T, numCoords_T > operator/( const linAlg::vec_t
 }
 
 
-
 // ##################
 // ### mat op vec ###
 // ##################

@@ -71,14 +71,6 @@ float linAlg::determinant( const mat4_t& mat ) {
       - row1[ 3 ] * determinant( subMat_14 );
 }
 
-//void linAlg::transpose( mat2_t& dst, const mat2_t& src ) {
-//    for (size_t y = 0; y < 2; y++) {
-//        for (size_t x = 0; x < 2; x++) {
-//            dst[y][x] = src[x][y];
-//        }
-//    }
-//}
-
 void linAlg::inverse( mat2_t& dst, const mat2_t& src ) {
     const float oneOverDeterminant = 1.0f / determinant( src );
     dst[ 0 ][ 0 ] =  oneOverDeterminant * src[ 1 ][ 1 ];
@@ -527,4 +519,3 @@ void linAlg::multMatrix( mat4_t& result, const mat4_t& left, const mat4_t& right
     pM[ 14 ] = pL[ 12 ] * pR[ 2 ] + pL[ 13 ] * pR[ 6 ] + pL[ 14 ] * pR[ 10 ] + pL[ 15 ] * pR[ 14 ];
     pM[ 15 ] = pL[ 12 ] * pR[ 3 ] + pL[ 13 ] * pR[ 7 ] + pL[ 14 ] * pR[ 11 ] + pL[ 15 ] * pR[ 15 ];
 }
-

@@ -33,8 +33,6 @@ struct linAlg {
 
 
     template<typename val_T, std::size_t rows, std::size_t cols>
-    //using mat_t = std::array< std::array< val_T, cols >, rows >;
-    //using mat_t = std::array< vec_t< val_T, cols >, rows >;
     using mat_t = vec_t< vec_t< val_T, cols >, rows >;
 
     using mat2_t   = mat_t< float, 2, 2 >;
@@ -218,7 +216,6 @@ struct linAlg {
 
         return true;
     }
-
 
     // https://sourceforge.net/p/anttweakbar/code/ci/master/tree/examples/TwSimpleGLUT.c#l59
     static void quaternionFromAxisAngle( quat_t& quat, const vec3_t& axis, float angle );
