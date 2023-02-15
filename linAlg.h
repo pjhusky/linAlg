@@ -93,6 +93,13 @@ struct linAlg {
         }
     }
 
+    template< typename val_T >
+    static inline val_T normalizeRet( const val_T& dstIn ) {
+        val_T dst = dstIn;
+        normalize( dst );
+        return dst;
+    }
+
     template < typename vec_T >
     static float dot( const vec_T& lhs, const vec_T& rhs ) {
         float accum = lhs[ 0 ] * rhs[ 0 ];
