@@ -82,6 +82,26 @@ struct linAlg {
     }
 
     template< typename val_T >
+    static float len( const val_T& valVec ) {
+        float len = 0.0f;
+        for ( size_t i = 0; i < valVec.size(); i++ ) { 
+            len += valVec[ i ] * valVec[ i ]; 
+        }
+        return sqrtf( len );
+    }
+
+    //template< typename val_T >
+    //static float dist( const val_T& v1, const val_T& v2 ) {
+    //    float len = 0.0f;
+    //    val_T diff;
+    //    sub( diff, v2, v1 );
+    //    for ( size_t i = 0; i < diff.size(); i++ ) { 
+    //        len += diff[ i ] * diff[ i ]; 
+    //    }
+    //    return sqrtf( len );
+    //}
+
+    template< typename val_T >
     static void normalize( val_T& dst ) {
         float len = 0.0f;
         for ( size_t i = 0; i < dst.size(); i++ ) { 
