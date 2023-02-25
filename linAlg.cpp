@@ -412,10 +412,17 @@ void linAlg::loadPerspectiveFovYMatrix( mat4_t& matrix, const float fovY_deg, co
 }
 
 void linAlg::loadPerspectiveMatrix( mat4_t& matrix, const float l, const float r, const float b, const float t, const float n, const float f ) {
-    matrix[ 0 ] = vec4_t{ ( 2.0f * n ) / ( r - l ), 0.0f, ( r + l ) / ( r - l ), 0.0f };        // row 0
-    matrix[ 1 ] = vec4_t{ 0.0f, ( 2.0f * n ) / ( t - b ), ( t + b ) / ( t - b ), 0.0f };        // row 1
-    matrix[ 2 ] = vec4_t{ 0.0f, 0.0f, -( f + n ) / ( f - n ), ( -2.0f * f * n ) / ( f - n ) };  // row 2
-    matrix[ 3 ] = vec4_t{ 0.0f, 0.0f, -1.0f, 0.0f };                                            // row 3
+    matrix[ 0 ] = vec4_t{ ( 2.0f * n ) / ( r - l ),                     0.0f,  ( r + l ) / ( r - l ),                          0.0f }; // row 0
+    matrix[ 1 ] = vec4_t{                     0.0f, ( 2.0f * n ) / ( t - b ),  ( t + b ) / ( t - b ),                          0.0f }; // row 1
+    matrix[ 2 ] = vec4_t{                     0.0f,                     0.0f, -( f + n ) / ( f - n ), ( -2.0f * f * n ) / ( f - n ) }; // row 2
+    matrix[ 3 ] = vec4_t{                     0.0f,                     0.0f,                  -1.0f,                          0.0f }; // row 3
+}
+
+void linAlg::loadOrthoMatrix( mat4_t& matrix, const float l, const float r, const float b, const float t, const float n, const float f ) {
+    matrix[ 0 ] = vec4_t{ 2.0f / ( r - l ),             0.0f,              0.0f, ( r + l ) / ( r - l ) }; // row 0
+    matrix[ 1 ] = vec4_t{             0.0f, 2.0f / ( t - b ),              0.0f, ( t + b ) / ( t - b ) }; // row 1
+    matrix[ 2 ] = vec4_t{             0.0f,             0.0f, -2.0f / ( f - n ), ( f + n ) / ( f - n ) }; // row 2
+    matrix[ 3 ] = vec4_t{             0.0f,             0.0f,              0.0f,                  1.0f }; // row 3
 }
 
 void linAlg::castMatrix( mat4_t& mat4, const mat3x4_t& mat3x4 ) {
