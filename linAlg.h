@@ -200,6 +200,7 @@ struct linAlg {
     static void loadScaleMatrix( mat2_t& matrix, const vec2_t& scaleVec );
     static void loadScaleMatrix( mat3_t& matrix, const vec3_t& scaleVec );
     static void loadScaleMatrix( mat3x4_t& matrix, const vec3_t& scaleVec );
+    static void loadScaleMatrix( mat4_t& matrix, const vec4_t& scaleVec );
 
     static void multMatrix( mat2_t& result, const mat2_t& left, const mat2_t& right );
     static void multMatrix( mat3_t& result, const mat3_t& left, const mat3_t& right );

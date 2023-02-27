@@ -302,6 +302,13 @@ void linAlg::loadScaleMatrix( mat3x4_t& matrix, const vec3_t& scaleVec ) {
     pMatrix[ 10 ] = scaleVec[ 2 ];
 }
 
+void linAlg::loadScaleMatrix( mat4_t& matrix, const vec4_t& scaleVec ) {
+    matrix[ 0 ] = linAlg::vec4_t{ scaleVec[ 0 ], 0.0f, 0.0f, 0.0f };
+    matrix[ 1 ] = linAlg::vec4_t{ 0.0f, scaleVec[ 1 ], 0.0f, 0.0f };
+    matrix[ 2 ] = linAlg::vec4_t{ 0.0f, 0.0f, scaleVec[ 2 ], 0.0f };
+    matrix[ 3 ] = linAlg::vec4_t{ 0.0f, 0.0f, 0.0f, scaleVec[ 3 ] };
+}
+
 void linAlg::multMatrix( mat2_t& result, const mat2_t& left, const mat2_t& right ) {
     for ( size_t row = 0; row < 2; row++ ) {
         for ( size_t col = 0; col < 2; col++ ) {
