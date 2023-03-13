@@ -6,6 +6,7 @@
 #include <cstdint>
 
 #define DEFINE_OPERATORS   1
+#define DEBUG_PRINT        1
 
 struct linAlg {
 
@@ -39,6 +40,10 @@ struct linAlg {
     using mat3_t   = mat_t< float, 3, 3 >;
     using mat3x4_t = mat_t< float, 3, 4 >;
     using mat4_t   = mat_t< float, 4, 4 >;
+
+#if ( DEBUG_PRINT != 0 )
+    #include "linAlgPrint.h"
+#endif
 
     template< typename val_T, std::size_t numElementsDst, std::size_t numElementsSrc >
     static void castVector( vec_t<val_T, numElementsDst>& dst, const vec_t<val_T, numElementsSrc>& src ) {
