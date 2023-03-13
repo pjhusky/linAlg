@@ -432,23 +432,23 @@ void linAlg::loadOrthoMatrix( mat4_t& matrix, const float l, const float r, cons
     matrix[ 3 ] = vec4_t{             0.0f,             0.0f,              0.0f,                  1.0f }; // row 3
 }
 
-void linAlg::castMatrix( mat4_t& mat4, const mat3x4_t& mat3x4 ) {
-    mat4[ 0 ] = mat3x4[ 0 ];
-    mat4[ 1 ] = mat3x4[ 1 ];
-    mat4[ 2 ] = mat3x4[ 2 ];
-    mat4[ 3 ] = vec4_t{ 0.0f, 0.0f, 0.0f, 1.0f };
+void linAlg::castMatrix( mat4_t& dst_mat4, const mat3x4_t& src_mat3x4 ) {
+    dst_mat4[ 0 ] = src_mat3x4[ 0 ];
+    dst_mat4[ 1 ] = src_mat3x4[ 1 ];
+    dst_mat4[ 2 ] = src_mat3x4[ 2 ];
+    dst_mat4[ 3 ] = vec4_t{ 0.0f, 0.0f, 0.0f, 1.0f };
 }
 
-void linAlg::castMatrix( mat3_t& mat3, const mat3x4_t& mat3x4 ) {
-    mat3[0] = vec3_t{ mat3x4[0][0], mat3x4[0][1], mat3x4[0][2] };
-    mat3[1] = vec3_t{ mat3x4[1][0], mat3x4[1][1], mat3x4[1][2] };
-    mat3[2] = vec3_t{ mat3x4[2][0], mat3x4[2][1], mat3x4[2][2] };
+void linAlg::castMatrix( mat3_t& dst_mat3, const mat3x4_t& src_mat3x4 ) {
+    dst_mat3[0] = vec3_t{ src_mat3x4[0][0], src_mat3x4[0][1], src_mat3x4[0][2] };
+    dst_mat3[1] = vec3_t{ src_mat3x4[1][0], src_mat3x4[1][1], src_mat3x4[1][2] };
+    dst_mat3[2] = vec3_t{ src_mat3x4[2][0], src_mat3x4[2][1], src_mat3x4[2][2] };
 }
 
-void linAlg::castMatrix( mat3x4_t& mat3x4, const mat3_t& mat3 ) {
-    mat3x4[0] = vec4_t{ mat3[0][0], mat3[0][1], mat3[0][2], 0.0f };
-    mat3x4[1] = vec4_t{ mat3[1][0], mat3[1][1], mat3[1][2], 0.0f };
-    mat3x4[2] = vec4_t{ mat3[2][0], mat3[2][1], mat3[2][2], 0.0f };
+void linAlg::castMatrix( mat3x4_t& dst_mat3x4, const mat3_t& src_mat3 ) {
+    dst_mat3x4[0] = vec4_t{ src_mat3[0][0], src_mat3[0][1], src_mat3[0][2], 0.0f };
+    dst_mat3x4[1] = vec4_t{ src_mat3[1][0], src_mat3[1][1], src_mat3[1][2], 0.0f };
+    dst_mat3x4[2] = vec4_t{ src_mat3[2][0], src_mat3[2][1], src_mat3[2][2], 0.0f };
 }
 
 void linAlg::quaternionFromAxisAngle( quat_t& quat, const vec3_t& axis, float angle ) {
