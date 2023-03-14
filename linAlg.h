@@ -49,7 +49,7 @@ struct linAlg {
     static void castVector( vec_t<val_T, numElementsDst>& dst, const vec_t<val_T, numElementsSrc>& src ) {
         memcpy( dst.data(), src.data(), minimum( src.size(), dst.size() ) * sizeof( val_T ) );
         if (dst.size() > src.size()) {
-            std::fill( &dst[src.size()], dst.data() + dst.size()*sizeof(val_T), val_T{ 0 } );
+           std::fill( &dst[src.size()], dst.data() + dst.size(), val_T{ 0 } );
         }
     }
 
