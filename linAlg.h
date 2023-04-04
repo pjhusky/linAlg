@@ -38,7 +38,7 @@ struct linAlg {
 
     using mat2_t   = mat_t< float, 2, 2 >;
     using mat3_t   = mat_t< float, 3, 3 >;
-    using mat3x4_t = mat_t< float, 3, 4 >;
+    using mat3x4_t = mat_t< float, 3, 4 >; // 3 rows, 4 columns
     using mat4_t   = mat_t< float, 4, 4 >;
 
 #if ( DEBUG_PRINT != 0 )
