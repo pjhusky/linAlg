@@ -2,8 +2,9 @@
 #define _LINALG_PRINT_H_E739A378_0E68_4401_BB14_6D23611B7068
 
 #include "linAlg.h"
-//#include <string>
+#include <stdio.h>
 
+namespace linAlgUtils {
     static void printVec( const char* label, const linAlg::vec3_t& vec ) {
         printf( "%s: (%f|%f|%f)\n", label, vec[0], vec[1], vec[2] );
     }
@@ -21,5 +22,6 @@
         printf( "%s: (%f|%f|%f|%f)\n", label, vec[0], vec[1], vec[2], vec[3] );
     #endif
     }
+}
 
 #endif // _LINALG_PRINT_H_E739A378_0E68_4401_BB14_6D23611B7068
