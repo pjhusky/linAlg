@@ -136,11 +136,16 @@ struct linAlg {
     }
 
     template < typename vec_T >
-    static inline float dist(const vec_T& lhs, const vec_T& rhs) {
+    static inline float distSquared(const vec_T& lhs, const vec_T& rhs) {
         vec_T diffVec;
         linAlg::sub(diffVec, lhs, rhs);
         const float distSquared = dot(diffVec, diffVec);
-        return sqrtf(distSquared);
+        return distSquared;
+    }
+
+    template < typename vec_T >
+    static inline float dist(const vec_T& lhs, const vec_T& rhs) {
+        return sqrtf( distSquared( lhs, rhs ) );
     }
 
     static void cross( vec3_t& dst, const vec3_t& lhs, const vec3_t& rhs );
@@ -237,6 +242,7 @@ struct linAlg {
     static void castMatrix( mat4_t& mat4, const mat3x4_t& mat3x4 );
     static void castMatrix( mat3_t& mat3, const mat3x4_t& mat3x4 );
     static void castMatrix( mat3x4_t& mat3x4, const mat3_t& mat3 );
+    static void castMatrix( mat3x4_t& mat3x4, const mat4_t& mat4 );
 
     template<typename val_T, std::size_t rows_T, std::size_t cols_T>
     static bool approxEqual( const linAlg::mat_t< val_T, rows_T, cols_T >& matrixLhs,
