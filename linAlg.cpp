@@ -508,6 +508,43 @@ void linAlg::multQuaternion( quat_t& result, const quat_t& q1, const quat_t& q2 
     result[3] = q1[3] * q2[3] - (q1[0] * q2[0] + q1[1] * q2[1] + q1[2] * q2[2]);
 }
 
+
+
+bool linAlg::isPointInsideTriangle( const vec3_t& P, const std::array<vec3_t, 3>& triangleVertexPositions ) {
+    const vec3_t v0 = triangleVertexPositions[0];
+    const vec3_t v1 = triangleVertexPositions[1];
+    const vec3_t v2 = triangleVertexPositions[2];
+
+    const vec3_t v0v1 = v1 - v0;
+    const vec3_t v0v2 = v2 - v0;
+
+    // No need to normalize
+    vec3_t N;
+    linAlg::cross( N, v0v1, v0v2 ); // N
+
+    const vec3_t v0P = P - v0;
+    vec3_t v0v1_v0P;
+    linAlg::cross( v0v1_v0P, v0v1, v0P );
+    if ( linAlg::dot( N, v0v1_v0P ) < 0.0f ) { return false; }
+
+
+    const vec3_t v1v2 = v2 - v1;
+    const vec3_t v1P = P - v1;
+    vec3_t v1v2_v1P;
+    linAlg::cross( v1v2_v1P, v1v2, v1P );
+    if ( linAlg::dot( N, v1v2_v1P ) < 0.0f ) { return false; }
+        
+
+    const vec3_t v2P = P - v2;
+    // ATTENTION: flipped order of cross product, i.e., flipped sign!
+    vec3_t v2P_v0v2;
+    linAlg::cross( v2P_v0v2, v2P, v0v2 );
+    if ( linAlg::dot( N, v2P_v0v2 ) < 0.0f ) { return false; }
+
+    return true;
+}
+
+
 void linAlg::multMatrix( mat4_t& result, const mat4_t& left, const mat4_t& right ) {
     float *const pM = getMatrixPtr( result );
     const float *const pL = getMatrixPtr( left );

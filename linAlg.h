@@ -262,6 +262,8 @@ struct linAlg {
     static void quaternionFromAxisAngle( quat_t& quat, const vec3_t& axis, float angle );
     static void quaternionToMatrix( mat3x4_t& mat, const quat_t& quat );
     static void multQuaternion( quat_t& result, const quat_t& q1, const quat_t& q2 );
+
+    static bool isPointInsideTriangle( const vec3_t& P, const std::array< vec3_t, 3 >& triangleVertexPositions );
 };
 
 #if ( DEFINE_OPERATORS != 0 )
